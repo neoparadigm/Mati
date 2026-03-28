@@ -28,10 +28,10 @@ User ↔ OpenClaw ↔ Mati Proxy (:30100) ↔ LLM
 ---
 
 ## Quick Start
-
-## Try it (2 lines)
+## Try it
 ```bash
-pip install httpx fastapi uvicorn click && git clone https://github.com/neoparadigm/Mati.git && cd Mati
+git clone https://github.com/neoparadigm/Mati.git && cd Mati
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 python3 -m mati.cli feeds
 ```
 
