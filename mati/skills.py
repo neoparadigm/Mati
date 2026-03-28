@@ -30,10 +30,16 @@ def load_skills(skills_dir: str) -> list[dict[str, Any]]:
             continue
         for path in sorted(folder.glob("*.json")):
             try:
-                skill = json.loads(path.read_text(encoding="utf-8"))
-                skill["_source"] = sub
-                skill["_path"] = str(path)
-                skills.append(skill)
+                data = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(data, list):
+                    for skill in data:
+                        skill["_source"] = sub
+                        skill["_path"] = str(path)
+                        skills.append(skill)
+                else:
+                    data["_source"] = sub
+                    data["_path"] = str(path)
+                    skills.append(data)
             except (json.JSONDecodeError, OSError) as exc:
                 logger.warning("Skipping invalid skill %s: %s", path, exc)
 
@@ -46,12 +52,6 @@ def retrieve_skills(
     query: str,
     top_k: int = 6,
 ) -> list[dict[str, Any]]:
-    """Retrieve the most relevant skills for a query.
-
-    Uses simple keyword matching. A future version could use embedding
-    similarity, but keyword matching is transparent, fast, and auditable
-    — important properties for a security tool.
-    """
     query_lower = query.lower()
     scored: list[tuple[float, dict[str, Any]]] = []
 
@@ -59,7 +59,6 @@ def retrieve_skills(
         if skill.get("retired", False):
             continue
 
-        # Score by keyword overlap
         keywords = skill.get("keywords", [])
         name = skill.get("name", "").lower()
         rule = skill.get("rule", "").lower()
@@ -72,9 +71,8 @@ def retrieve_skills(
             if word in text:
                 score += 1.0
             if word in name:
-                score += 2.0  # name matches are stronger
+                score += 2.0
 
-        # Evolved skills get a small boost (they address known gaps)
         if skill.get("_source") == "evolved":
             score += 0.5
 
@@ -88,7 +86,6 @@ def retrieve_skills(
 
 
 def format_skill_injection(skills: list[dict[str, Any]]) -> str:
-    """Format selected skills as a system prompt injection block."""
     if not skills:
         return ""
 
@@ -124,7 +121,6 @@ def save_evolved_skill(
     failures_analysed: int,
     precision_before: float,
 ) -> Path:
-    """Save a new evolved skill to disk."""
     evolved_dir = Path(skills_dir) / "evolved"
     evolved_dir.mkdir(parents=True, exist_ok=True)
 

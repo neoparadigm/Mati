@@ -205,10 +205,9 @@ Mati builds on:
 
 ```bibtex
 @misc{mati2026,
-  author       = {Subhrajyoti},
+  author       = {Subhajyoti Chakraborty},
   title        = {Mati: Self-Evolving Threat Intelligence through Objective Ground Truth},
-  year         = {2026},
-  url          = {https://github.com/subhrajyoti/mati},
+  year         = {2026}
 }
 ```
 
