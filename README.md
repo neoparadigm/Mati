@@ -29,11 +29,13 @@ User ↔ OpenClaw ↔ Mati Proxy (:30100) ↔ LLM
 
 ## Quick Start
 
+## Try it (2 lines)
 ```bash
-pip install mati-intel
-mati setup          # interactive config wizard
-mati start          # start the proxy
+pip install httpx fastapi uvicorn click && git clone https://github.com/neoparadigm/Mati.git && cd Mati
+python3 -m mati.cli feeds
 ```
+
+Tests OSINT feed connectivity. No API keys needed. You should see ✅ for CISA KEV, CVEDB, EPSS, Shodan InternetDB, and ThreatFox.
 
 Then point your OpenClaw agent at `http://127.0.0.1:30100/v1`. Mati intercepts requests transparently — your agent doesn't know it exists.
 
