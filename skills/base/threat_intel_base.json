@@ -1,0 +1,53 @@
+[
+  {
+    "name": "kev-is-always-p1",
+    "rule": "Any CVE added to the CISA Known Exploited Vulnerabilities catalog is P1 CRITICAL regardless of CVSS score. KEV means confirmed active exploitation in the wild with federal remediation deadlines.",
+    "keywords": ["kev", "cisa", "exploited", "critical", "p1"],
+    "evidence": "CISA KEV entries have confirmed exploitation. This is the highest-confidence signal in threat intelligence."
+  },
+  {
+    "name": "epss-above-07-escalate",
+    "rule": "When EPSS score exceeds 0.7, escalate to at least P2 regardless of whether a public exploit exists. EPSS > 0.7 indicates high probability of exploitation within 30 days based on statistical models trained on real exploitation data.",
+    "keywords": ["epss", "exploitation", "probability", "escalate", "priority"]
+  },
+  {
+    "name": "high-risk-vendor-escalation",
+    "rule": "CVEs affecting Ivanti, Fortinet, Citrix, Palo Alto Networks, and SolarWinds should receive a +1 priority escalation. These vendors have a documented history of rapid exploitation — often within days of disclosure. A CVSS 7.5 for Ivanti carries more real-world risk than CVSS 7.5 for a niche product.",
+    "keywords": ["ivanti", "fortinet", "citrix", "palo alto", "solarwinds", "vendor", "escalation"]
+  },
+  {
+    "name": "rce-unauthenticated-is-p1",
+    "rule": "CVEs with 'remote code execution' AND ('unauthenticated' OR 'no user interaction') in the description should be P1 if CVSS >= 8.0. These indicate trivially exploitable vulnerabilities that require no prerequisites.",
+    "keywords": ["rce", "remote code execution", "unauthenticated", "no user interaction", "critical"]
+  },
+  {
+    "name": "poc-published-escalate",
+    "rule": "When a public exploit or proof-of-concept is published on GitHub for a CVE, escalate by one priority level. The existence of weaponised code dramatically increases the probability and speed of exploitation.",
+    "keywords": ["poc", "exploit", "proof of concept", "github", "published", "escalate"]
+  },
+  {
+    "name": "unexpected-certificate-is-p2",
+    "rule": "New SSL certificates issued for monitored domains from unexpected Certificate Authorities, or for unexpected subdomains, should be flagged as P2. This can indicate phishing infrastructure, shadow IT, or CA compromise.",
+    "keywords": ["certificate", "ssl", "tls", "crt.sh", "subdomain", "phishing", "ca"]
+  },
+  {
+    "name": "dmarc-none-is-p1",
+    "rule": "A monitored domain with DMARC policy p=none or missing DMARC record is P1 for email security. This means anyone can send email impersonating the domain with no enforcement. Combined with SPF softfail (~all), the domain is fully spoofable.",
+    "keywords": ["dmarc", "spf", "email", "spoofing", "authentication", "p=none"]
+  },
+  {
+    "name": "supply-chain-malware-is-p1",
+    "rule": "Any GitHub Advisory tagged as 'malware' or any advisory involving a poisoned dependency is P1 CRITICAL. Supply chain attacks affect every downstream consumer of the compromised package. Check if affected packages are in client tech stacks immediately.",
+    "keywords": ["supply chain", "malware", "dependency", "poisoned", "npm", "pip", "package"]
+  },
+  {
+    "name": "patch-tuesday-tracking",
+    "rule": "Microsoft Patch Tuesday releases (second Tuesday of each month) should trigger a focused review of all Microsoft CVEs. CVEs in Exchange, SharePoint, Entra ID, and Intune affecting monitored stacks are P2 minimum on release day.",
+    "keywords": ["patch tuesday", "microsoft", "exchange", "sharepoint", "entra", "intune", "monthly"]
+  },
+  {
+    "name": "correlation-escalation",
+    "rule": "When multiple risk signals co-occur for the same CVE (high CVSS + high EPSS, or CVE + public exploit + scanning activity, or CVE + vendor in KEV history), the combined risk exceeds any single signal. Escalate by one priority level when 2+ risk signals are present.",
+    "keywords": ["correlation", "multiple", "signals", "combined", "risk", "escalate"]
+  }
+]
