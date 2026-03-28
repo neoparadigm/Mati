@@ -48,7 +48,7 @@ mati evolve         # run evolution cycle
 
 ## How It Works
 
-Mati operates as a **dual-loop** system inspired by [MetaClaw](https://github.com/aiming-lab/MetaClaw), but specialised for the threat intelligence domain where outcomes are objectively verifiable.
+Mati operates as a **dual-loop** system, specialised for the threat intelligence domain where outcomes are objectively verifiable.
 
 ### Loop 1: Skill Injection (immediate)
 
@@ -88,7 +88,7 @@ Week 7    Validator measures — did the new skill improve accuracy?
 
 | Approach | Reward signal | Reliability |
 |----------|--------------|-------------|
-| MetaClaw | LLM judge scores response quality | Subjective, varies by judge model |
+| Generic | LLM judge scores response quality | Subjective, varies by judge model |
 | Human feedback | Analyst confirms/corrects | High quality but doesn't scale |
 | **Mati** | CISA KEV additions, exploit publications, EPSS changes | **Objective, verifiable, automated** |
 
@@ -196,7 +196,6 @@ Environment variables: `MATI_LLM_API_KEY`, `NVD_API_KEY`, `GITHUB_TOKEN`, `SHODA
 Mati builds on:
 
 - [OpenClaw](https://openclaw.ai) — the agent framework
-- [MetaClaw](https://github.com/aiming-lab/MetaClaw) — inspiration for the dual-loop evolution architecture
 - [CISA KEV](https://github.com/cisagov/kev-data) — ground truth for exploitation
 - [FIRST.org EPSS](https://www.first.org/epss/) — exploitation probability scoring
 
