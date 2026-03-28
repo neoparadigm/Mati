@@ -294,7 +294,7 @@ def feeds() -> None:
             ("EPSS", f.fetch_epss(["CVE-2024-3400"])),
             ("GitHub Advisory", f.fetch_github_advisories(token=config.github_token, limit=3)),
             ("Shodan InternetDB", f.fetch_shodan_internetdb("8.8.8.8")),
-            (("ThreatFox (key required)", f.fetch_threatfox_iocs(api_key=config.otx_api_key, days=1)),
+            ("ThreatFox (key required)", f.fetch_threatfox_iocs(api_key=config.otx_api_key, days=1)),
         ]
 
         for name, coro in tests:
