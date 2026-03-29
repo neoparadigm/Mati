@@ -1,6 +1,8 @@
 # 🛡️ Mati
 
-### Self-evolving threat intelligence for OpenClaw agents.
+### Self-evolving threat intelligence for AI agents.
+
+Mati is a self-evolving threat intelligence engine that works with any AI agent framework — OpenClaw, LangChain, Azure AI Foundry, AWS Bedrock, Microsoft AutoGen, or any OpenAI-compatible API. It injects learned threat intelligence skills, logs priority predictions, scores them against objective ground truth, and synthesises corrective skills automatically.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue?style=flat&labelColor=555)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat&labelColor=555)](LICENSE)
@@ -9,7 +11,7 @@
 
 ---
 
-**Mati** is an OpenAI-compatible proxy that sits between your [OpenClaw](https://openclaw.ai) agent and the upstream LLM. It intercepts every request, injects threat intelligence skills, logs priority predictions, and scores them against objective ground truth. When Mati is wrong, it analyses *why* and synthesises corrective skills automatically.
+**Mati** is an OpenAI-compatible proxy that sits between your agent and the upstream LLM. It intercepts every request, injects threat intelligence skills, logs priority predictions, and scores them against objective ground truth. When Mati is wrong, it analyses *why* and synthesises corrective skills automatically.
 
 Unlike general-purpose agent evolution frameworks, Mati's reward signal comes from reality — not from another LLM's opinion.
 
