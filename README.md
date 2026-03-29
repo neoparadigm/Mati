@@ -201,7 +201,64 @@ Mati builds on:
 - [CISA KEV](https://github.com/cisagov/kev-data) — ground truth for exploitation
 - [FIRST.org EPSS](https://www.first.org/epss/) — exploitation probability scoring
 
----
+## Demo (no API keys needed)
+```bash
+git clone https://github.com/neoparadigm/Mati.git && cd Mati
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt && pip install plotly
+python3 -m mati.cli demo
+```
+
+Runs 90 days of simulated threat predictions against real CVE/KEV data, scores them, evolves skills from failure patterns, and opens an interactive Plotly dashboard showing the accuracy improvement.
+
+## Enterprise Integration
+
+Mati is framework-agnostic. Three lines to connect it to your stack:
+
+### LangChain / LangGraph
+```python
+from mati.adapters import LangChainAdapter
+mati = LangChainAdapter()
+skills = mati.get_skill_context("Assess CVE-2026-20963")
+# Inject skills into your chain's system prompt
+```
+
+### Azure AI Foundry / Copilot Studio
+```python
+from mati.adapters import AzureFoundryAdapter
+mati = AzureFoundryAdapter()
+skills = mati.get_skill_context("Assess CVE-2026-20963")
+# Inject into your AzureOpenAI call
+```
+
+### AWS Bedrock Agents
+```python
+from mati.adapters import BedrockAdapter
+mati = BedrockAdapter()
+skills = mati.get_skill_context("Assess CVE-2026-20963")
+# Inject into bedrock.converse() system param
+```
+
+### Microsoft AutoGen / MAF
+```python
+from mati.adapters import AutoGenAdapter
+mati = AutoGenAdapter()
+enhanced = mati.enhance_system_message("You are a SOC analyst.", "Assess CVE-2026-20963")
+```
+
+### OpenClaw (native proxy)
+```python
+from mati.adapters import OpenClawAdapter
+adapter = OpenClawAdapter()
+adapter.start_proxy()  # starts on :30100, point OpenClaw here
+```
+
+### Any OpenAI-compatible API
+```python
+from mati.adapters import get_adapter
+mati = get_adapter("generic")  # or "langchain", "azure", "bedrock", "autogen", "openclaw"
+skills = mati.get_skill_context("your query")
+```
 
 ## Citation
 
