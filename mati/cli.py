@@ -294,7 +294,7 @@ def feeds() -> None:
             ("EPSS", f.fetch_epss(["CVE-2024-3400"])),
             ("GitHub Advisory", f.fetch_github_advisories(token=config.github_token, limit=3)),
             ("Shodan InternetDB", f.fetch_shodan_internetdb("8.8.8.8")),
-            ("ThreatFox (key required)", f.fetch_threatfox_iocs(api_key=config.otx_api_key, days=1)),
+            ("ThreatFox", f.fetch_threatfox_iocs(days=1)),
         ]
 
         for name, coro in tests:
@@ -362,6 +362,58 @@ echo "   Run 'mati start' in a separate terminal first."
 
 def main() -> None:
     cli()
+
+
+@cli.command()
+@click.option("--days", default=90, help="Days of historical data to simulate")
+@click.option("--no-browser", is_flag=True, help="Don't auto-open the dashboard")
+def demo(days: int, no_browser: bool) -> None:
+    """Run the evolution pipeline against historical data and launch visual dashboard."""
+    click.echo("\n🛡️  Mati Demo — Self-Evolving Threat Intelligence\n")
+
+    try:
+        import plotly  # noqa: F401
+    except ImportError:
+        click.echo("❌ Plotly required for the dashboard. Install with:")
+        click.echo("   pip install plotly")
+        return
+
+    from .demo import generate_benchmark_data, render_dashboard
+
+    click.echo(f"  Generating {days} days of benchmark data...")
+    data = generate_benchmark_data(days=days)
+
+    naive = data["naive_metrics"]
+    evolved = data["evolved_metrics"]
+
+    click.echo(f"  Predictions: {len(data['predictions'])}")
+    click.echo(f"\n  📊 Before evolution (days 1-45):")
+    click.echo(f"     Precision:  {naive['precision']:.1%}")
+    click.echo(f"     Recall:     {naive['recall']:.1%}")
+    click.echo(f"     Accuracy:   {naive['accuracy']:.1%}")
+    click.echo(f"     Miss rate:  {naive['miss_rate']:.1%}")
+
+    click.echo(f"\n  🧬 After evolution (days 46-90):")
+    click.echo(f"     Precision:  {evolved['precision']:.1%}")
+    click.echo(f"     Recall:     {evolved['recall']:.1%}")
+    click.echo(f"     Accuracy:   {evolved['accuracy']:.1%}")
+    click.echo(f"     Miss rate:  {evolved['miss_rate']:.1%}")
+
+    improvement = evolved["accuracy"] - naive["accuracy"]
+    click.echo(f"\n  ✅ Accuracy improved by {improvement:+.1%} after skill evolution")
+    click.echo(f"  🧬 {len(data['evolved_skills'])} skills auto-generated from failure patterns")
+
+    click.echo("\n  Rendering dashboard...")
+    html_path = render_dashboard(data)
+    click.echo(f"  Dashboard: {html_path}")
+
+    if not no_browser:
+        import webbrowser
+        webbrowser.open(f"file://{html_path}")
+        click.echo("  Opened in browser.")
+
+    click.echo("\n🛡️  This is what Mati does with your live prediction data over time.")
+    click.echo("  Start logging real predictions with 'mati start' to begin your own evolution.\n")
 
 
 if __name__ == "__main__":
